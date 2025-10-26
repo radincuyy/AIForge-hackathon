@@ -14,7 +14,7 @@ type Project = {
   name: string;
   description: string | null;
   generated_spec: string | null;
-  generated_stack: Record<string, any> | null;
+  generated_stack: Record<string, unknown> | null;
   created_at: string;
   updated_at: string;
 };
@@ -27,6 +27,7 @@ export default function ProjectDetailPage() {
 
   useEffect(() => {
     loadProject();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.id]);
 
   const loadProject = async () => {
@@ -120,9 +121,9 @@ export default function ProjectDetailPage() {
                 </h2>
                 <div className="grid gap-4">
                   {Object.entries(project.generated_stack).map(
-                    ([key, value]: [string, any]) => {
+                    ([key, value]: [string, unknown]) => {
                       if (key === "additional" && Array.isArray(value)) {
-                        return value.map((item: any, i: number) => (
+                        return value.map((item: Record<string, string>, i: number) => (
                           <StackItem
                             key={`${key}-${i}`}
                             title={item.category}
@@ -131,15 +132,16 @@ export default function ProjectDetailPage() {
                           />
                         ));
                       }
-                      if (typeof value === "object" && value.name) {
+                      if (typeof value === "object" && value !== null && "name" in value) {
+                        const techValue = value as { name: string; reason: string };
                         return (
                           <StackItem
                             key={key}
                             title={
                               key.charAt(0).toUpperCase() + key.slice(1)
                             }
-                            name={value.name}
-                            reason={value.reason}
+                            name={techValue.name}
+                            reason={techValue.reason}
                           />
                         );
                       }

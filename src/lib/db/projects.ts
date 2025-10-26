@@ -12,7 +12,7 @@ type Project = {
   name: string;
   description: string | null;
   generated_spec: string | null;
-  generated_stack: Record<string, any> | null;
+  generated_stack: Record<string, unknown> | null;
   created_at: string;
   updated_at: string;
 };
@@ -45,13 +45,31 @@ export async function createProject(data: {
   return project as Project;
 }
 
+interface TechItem {
+  name: string;
+  reason: string;
+}
+
+interface AdditionalItem extends TechItem {
+  category: string;
+}
+
+interface StackData {
+  frontend?: TechItem;
+  backend?: TechItem;
+  database?: TechItem;
+  authentication?: TechItem;
+  hosting?: TechItem;
+  additional?: AdditionalItem[];
+}
+
 export async function updateProject(
   id: string,
   data: {
     name?: string;
     description?: string;
     generated_spec?: string;
-    generated_stack?: Record<string, any>;
+    generated_stack?: StackData;
   }
 ) {
   const { supabase, userId } = await getSupabaseClient();

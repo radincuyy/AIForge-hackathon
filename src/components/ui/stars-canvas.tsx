@@ -24,7 +24,7 @@ export function StarsCanvas({
   paused = false,
 }: StarsCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -33,7 +33,7 @@ export function StarsCanvas({
     const ctx = canvas.getContext('2d')!;
     let w = (canvas.width = window.innerWidth);
     let h = (canvas.height = window.innerHeight);
-    let stars: Star[] = [];
+    const stars: Star[] = [];
     let count = 0;
 
     // --- Cached gradient texture ---

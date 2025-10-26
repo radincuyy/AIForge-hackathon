@@ -1,17 +1,35 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, FileText, Download, Edit } from "lucide-react";
 import { updateProject } from "@/lib/db/projects";
 
+interface TechItem {
+  name: string;
+  reason: string;
+}
+
+interface AdditionalItem extends TechItem {
+  category: string;
+}
+
+interface StackData {
+  frontend?: TechItem;
+  backend?: TechItem;
+  database?: TechItem;
+  authentication?: TechItem;
+  hosting?: TechItem;
+  additional?: AdditionalItem[];
+}
+
 interface SpecGeneratorProps {
   projectId: string;
   description: string;
-  stack: any;
-  onSpecGenerated: (spec: string) => void;
+  stack: StackData;
   onBack: () => void;
 }
 
@@ -19,7 +37,6 @@ export default function SpecGenerator({
   projectId,
   description,
   stack,
-  onSpecGenerated,
   onBack,
 }: SpecGeneratorProps) {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -65,7 +82,6 @@ export default function SpecGenerator({
       }
 
       console.log("Spec generation complete, length:", fullSpec.length);
-      onSpecGenerated(fullSpec);
       await updateProject(projectId, { generated_spec: fullSpec });
     } catch (err) {
       console.error("Spec generation error:", err);
@@ -89,7 +105,6 @@ export default function SpecGenerator({
 
   const handleSave = async () => {
     await updateProject(projectId, { generated_spec: spec });
-    onSpecGenerated(spec);
     setIsEditing(false);
   };
 
@@ -187,11 +202,11 @@ export default function SpecGenerator({
                     📦 Browse Templates
                   </Button>
                 </a>
-                <a href="/projects" className="block">
+                <Link href="/projects" className="block">
                   <Button variant="outline" size="sm" className="w-full">
                     📁 View My Projects
                   </Button>
-                </a>
+                </Link>
                 <Button
                   variant="outline"
                   size="sm"

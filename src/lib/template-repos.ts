@@ -98,10 +98,24 @@ export const TEMPLATE_REPOSITORIES: Record<string, TemplateRepo> = {
   },
 };
 
+interface TechItem {
+  name: string;
+  reason: string;
+}
+
+interface StackData {
+  frontend?: TechItem;
+  backend?: TechItem;
+  database?: TechItem;
+  authentication?: TechItem;
+  hosting?: TechItem;
+  additional?: Array<TechItem & { category: string }>;
+}
+
 /**
  * Match template repository based on tech stack
  */
-export function matchTemplateRepo(stack: any): TemplateRepo | null {
+export function matchTemplateRepo(stack: StackData): TemplateRepo | null {
   const frontend = stack.frontend?.name?.toLowerCase() || "";
   const backend = stack.backend?.name?.toLowerCase() || "";
   const database = stack.database?.name?.toLowerCase() || "";
@@ -176,11 +190,9 @@ export function getTemplateByName(name: string): TemplateRepo | null {
 
 /**
  * Clone template repository (for server-side use)
+ * @deprecated Use downloadTemplateZip instead
  */
-export async function cloneTemplate(
-  template: TemplateRepo,
-  targetPath: string
-): Promise<void> {
+export async function cloneTemplate(): Promise<void> {
   // This would use git clone or download zip
   // Implementation depends on your deployment environment
   throw new Error("Not implemented - use downloadTemplateZip instead");
@@ -213,7 +225,7 @@ export async function downloadTemplateZip(
 /**
  * Get recommended templates for a stack
  */
-export function getRecommendedTemplates(stack: any): TemplateRepo[] {
+export function getRecommendedTemplates(stack: StackData): TemplateRepo[] {
   const matched = matchTemplateRepo(stack);
   if (matched) {
     return [matched];

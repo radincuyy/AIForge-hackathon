@@ -6,10 +6,28 @@ import { Card } from "@/components/ui/card";
 import { Loader2, CheckCircle, Layers } from "lucide-react";
 import { updateProject } from "@/lib/db/projects";
 
+interface TechItem {
+  name: string;
+  reason: string;
+}
+
+interface AdditionalItem extends TechItem {
+  category: string;
+}
+
+interface StackData {
+  frontend?: TechItem;
+  backend?: TechItem;
+  database?: TechItem;
+  authentication?: TechItem;
+  hosting?: TechItem;
+  additional?: AdditionalItem[];
+}
+
 interface StackRecommendationProps {
   projectId: string;
   description: string;
-  onStackGenerated: (stack: any) => void;
+  onStackGenerated: (stack: StackData) => void;
   onNext: () => void;
 }
 
@@ -20,7 +38,7 @@ export default function StackRecommendation({
   onNext,
 }: StackRecommendationProps) {
   const [isGenerating, setIsGenerating] = useState(false);
-  const [stack, setStack] = useState<any>(null);
+  const [stack, setStack] = useState<StackData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const generateStack = async () => {
@@ -44,7 +62,7 @@ export default function StackRecommendation({
         let errorData;
         try {
           errorData = await response.json();
-        } catch (parseError) {
+        } catch {
           const textError = await response.text();
           console.error("Error response (text):", textError);
           throw new Error(`API Error (${response.status}): ${textError || "Unknown error"}`);
@@ -53,7 +71,7 @@ export default function StackRecommendation({
         throw new Error(errorData.error || `Failed to generate stack recommendation (${response.status})`);
       }
 
-      const stackData = await response.json();
+      const stackData = await response.json() as StackData;
       console.log("Stack data received:", stackData);
       
       setStack(stackData);
@@ -155,15 +173,14 @@ export default function StackRecommendation({
                   reason={stack.hosting.reason}
                 />
               )}
-              {stack.additional &&
-                stack.additional.map((item: any, i: number) => (
-                  <StackItem
-                    key={i}
-                    title={item.category}
-                    name={item.name}
-                    reason={item.reason}
-                  />
-                ))}
+              {stack.additional && stack.additional.map((item, i) => (
+                <StackItem
+                  key={i}
+                  title={item.category}
+                  name={item.name}
+                  reason={item.reason}
+                />
+              ))}
             </div>
           </Card>
 

@@ -57,6 +57,7 @@ export function getAIProvider(): AIProvider {
 /**
  * Get the AI model instance based on provider and model type
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getAIModel(modelType: "default" | "fast" | "smart" = "default"): any {
   const provider = getAIProvider();
   const modelName = AI_MODELS[provider][modelType];

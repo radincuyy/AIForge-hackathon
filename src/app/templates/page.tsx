@@ -20,8 +20,6 @@ import {
   ExternalLink,
   Search,
   Filter,
-  Sparkles,
-  Package,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";

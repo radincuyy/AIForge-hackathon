@@ -64,7 +64,7 @@ Please analyze this project and return a JSON object with recommended technologi
     try {
       // First, try to parse directly
       stackRecommendation = JSON.parse(result.text);
-    } catch (parseError) {
+    } catch {
       // If that fails, try to extract JSON from markdown code blocks
       const jsonMatch = result.text.match(/```(?:json)?\s*(\{[\s\S]*?\})\s*```/);
       if (jsonMatch) {

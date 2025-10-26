@@ -3,7 +3,7 @@
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 
-import { Sparkles, Zap, FileCode, Package, LogIn, TrendingUp, CheckCircle2, Briefcase, GraduationCap, Rocket, Mail, Github, Twitter, Linkedin } from "lucide-react";
+import { Sparkles, Zap, FileCode, Package, LogIn, TrendingUp, Briefcase, GraduationCap, Rocket, Mail, Github, Twitter, Linkedin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import Navigation from "@/components/navigation";

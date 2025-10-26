@@ -15,9 +15,26 @@ export default function ArchitectPage() {
   const [step, setStep] = useState<"input" | "stack" | "spec">("input");
   const [projectName, setProjectName] = useState("");
   const [description, setDescription] = useState("");
+  interface TechItem {
+    name: string;
+    reason: string;
+  }
+
+  interface AdditionalItem extends TechItem {
+    category: string;
+  }
+
+  interface StackData {
+    frontend?: TechItem;
+    backend?: TechItem;
+    database?: TechItem;
+    authentication?: TechItem;
+    hosting?: TechItem;
+    additional?: AdditionalItem[];
+  }
+
   const [projectId, setProjectId] = useState<string | null>(null);
-  const [stack, setStack] = useState<any>(null);
-  const [spec, setSpec] = useState<string>("");
+  const [stack, setStack] = useState<StackData | null>(null);
   const [isCreating, setIsCreating] = useState(false);
 
   const handleStartProject = async () => {
@@ -39,12 +56,8 @@ export default function ArchitectPage() {
     }
   };
 
-  const handleStackGenerated = (generatedStack: any) => {
+  const handleStackGenerated = (generatedStack: StackData) => {
     setStack(generatedStack);
-  };
-
-  const handleSpecGenerated = (generatedSpec: string) => {
-    setSpec(generatedSpec);
   };
 
   return (
@@ -160,12 +173,11 @@ export default function ArchitectPage() {
             />
           )}
 
-          {step === "spec" && projectId && (
+          {step === "spec" && projectId && stack && (
             <SpecGenerator
               projectId={projectId}
               description={description}
               stack={stack}
-              onSpecGenerated={handleSpecGenerated}
               onBack={() => setStep("stack")}
             />
           )}
