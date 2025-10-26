@@ -49,3 +49,6 @@ next-env.d.ts
 
 # devcontainer
 .devcontainer/
+
+# git backup
+.git.backup/
